@@ -184,6 +184,7 @@
     <Compile Include="Models\Customers.cs">
       <DependentUpon>Northwind.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomersPartial.cs" />
     <Compile Include="Models\Employees.cs">
       <DependentUpon>Northwind.tt</DependentUpon>
     </Compile>
@@ -214,6 +215,7 @@
     <Compile Include="Models\Region.cs">
       <DependentUpon>Northwind.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Result.cs" />
     <Compile Include="Models\Shippers.cs">
       <DependentUpon>Northwind.tt</DependentUpon>
     </Compile>
@@ -224,7 +226,8 @@
       <DependentUpon>Northwind.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\Customers.cs" />
+    <Compile Include="Service\CRUD.cs" />
+    <Compile Include="Service\Customer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
