@@ -10,7 +10,7 @@ using System.Web;
 
 namespace NorthWind.Service
 {
-    public interface ICRUD
+    public interface ICRUDRepository
     {
         Models.Result Create(object Content);
         Models.Result Update(object Content);
