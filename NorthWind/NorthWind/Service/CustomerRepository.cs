@@ -73,11 +73,18 @@ namespace NorthWind.Service
             return db.Customers.ToList();
         }
 
+        public object GetEachData(dynamic ID)
+        {
+            var Customer = db.Customers.Find(ID);
+            return Customer;
+        }
+
         public Models.Result Save()
         {
             try
             {
                 db.SaveChanges();
+                db.Dispose();
                 return new Result { ResultCode = 200, ResultMsg = "成功。" };
             }
             catch (Exception ex)
@@ -89,26 +96,12 @@ namespace NorthWind.Service
                 ex);
                 return new Result { ResultCode = 404, ResultMsg = ex.Message };
             }
-        }
-
-        private bool _disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
+            finally
             {
-                if (disposing)
-                {
-                    db.Dispose();
-                }
+                db.Dispose();
             }
-            this._disposed = true;
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+
     }
 }
