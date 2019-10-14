@@ -16,6 +16,7 @@ namespace NorthWind.Service
         Models.Result Update(object Content);
         Models.Result Delete(dynamic ID);
         object GetList();
+        object GetEachData(dynamic ID);
         Models.Result Save();
     }
 
