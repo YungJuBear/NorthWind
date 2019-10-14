@@ -16,7 +16,7 @@ namespace NorthWind.Controllers
     {
         private static ILogger _log = LogManager.GetCurrentClassLogger();
 
-        private CustomerRepository  CustomerRepository;
+        private readonly ICRUDRepository  CustomerRepository;
 
         public CustomersController()
         {
@@ -31,17 +31,16 @@ namespace NorthWind.Controllers
         }
 
         // GET: api/Customers/5
-        //[ResponseType(typeof(Customers))]
-        //public IHttpActionResult GetCustomers(string id)
-        //{
-
-        //    if (customers == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(customers);
-        //}
+        [HttpGet]
+        [ResponseType(typeof(Customers))]
+        public IHttpActionResult GetCustomers(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Ok(new Result { ResultCode = 404, ResultMsg = "id不能為空。" });
+            }
+            return Ok(CustomerRepository.GetEachData(id));
+        }
 
         // PUT: api/Customers/5
         [HttpPut]
