@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 using NorthWind.Models;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
@@ -16,7 +18,9 @@ namespace NorthWind.Service
 
         public Models.Result Create(object Content)
         {
-            var customers = JsonConvert.DeserializeObject<Models.Customers>(Content.ToString());
+
+            Models.Customers customers = new Customers();
+            customers = (Models.Customers)Content;
 
             if (string.IsNullOrEmpty(customers.CustomerID))
             {
@@ -26,19 +30,25 @@ namespace NorthWind.Service
             {
                 return new Result { ResultCode = 404, ResultMsg = "公司名稱不能為空。" };
             }
+
             db.Customers.Add(customers);
 
             return Save();
 
         }
+
         public Models.Result Update(object Content)
         {
-            var customers = JsonConvert.DeserializeObject<Models.Customers>(Content.ToString());
+
+            Models.Customers customers = new Customers();
+
+            customers = (Models.Customers)Content;
 
             db.Entry(customers).State = EntityState.Modified;
 
             return Save();
         }
+
         public Models.Result Delete(dynamic ID)
         {
 
@@ -57,10 +67,12 @@ namespace NorthWind.Service
 
             return new Result { ResultCode = 404, ResultMsg = "找不到此ID。" };
         }
+
         public object GetList()
         {
             return db.Customers.ToList();
         }
+
         public Models.Result Save()
         {
             try
@@ -92,6 +104,7 @@ namespace NorthWind.Service
             }
             this._disposed = true;
         }
+
         public void Dispose()
         {
             Dispose(true);
