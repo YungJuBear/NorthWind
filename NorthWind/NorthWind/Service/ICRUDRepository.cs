@@ -10,15 +10,13 @@ using System.Web;
 
 namespace NorthWind.Service
 {
-    public interface ICRUDRepository
+    public interface ICRUDRepository<T>
     {
-        Models.Result Create(object Content);
-        Models.Result Update(object Content);
-        Models.Result Delete(dynamic ID);
+        Result Create(T Content);
+        Result Update(T Content);
+        Result Delete(int ID);
         object GetList();
-        object GetEachData(dynamic ID);
-        Models.Result Save();
+        object GetEachData(int ID);
+        Result Save();
     }
-
-   
 }
