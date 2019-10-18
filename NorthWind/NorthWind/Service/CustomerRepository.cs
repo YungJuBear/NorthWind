@@ -10,18 +10,15 @@ using System.Reflection;
 
 namespace NorthWind.Service
 {
-    public class CustomerRepository : ICRUDRepository
+    public class CustomerRepository : ICRUDRepository<Customers>, IDisposable
     {
+       // delegate T Tabel<T>(T n);
         private NorthwindEntities db = new NorthwindEntities();
 
         private static ILogger _log = LogManager.GetCurrentClassLogger();
 
-        public Models.Result Create(object Content)
+        public Models.Result Create(Customers customers)
         {
-
-            Models.Customers customers = new Customers();
-            customers = (Models.Customers)Content;
-
             if (string.IsNullOrEmpty(customers.CustomerID))
             {
                 return new Result { ResultCode = 404, ResultMsg = "顧客編號不能為空。" };
@@ -37,19 +34,14 @@ namespace NorthWind.Service
 
         }
 
-        public Models.Result Update(object Content)
+        public Models.Result Update(Customers customers)
         {
-
-            Models.Customers customers = new Customers();
-
-            customers = (Models.Customers)Content;
-
             db.Entry(customers).State = EntityState.Modified;
 
             return Save();
         }
 
-        public Models.Result Delete(dynamic ID)
+        public Models.Result Delete(int ID)
         {
 
             if (string.IsNullOrEmpty(ID))
@@ -73,7 +65,7 @@ namespace NorthWind.Service
             return db.Customers.ToList();
         }
 
-        public object GetEachData(dynamic ID)
+        public object GetEachData(int ID)
         {
             var Customer = db.Customers.Find(ID);
             return Customer;
@@ -102,6 +94,23 @@ namespace NorthWind.Service
             }
         }
 
+        private bool _disposed = false;
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this._disposed = true;
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
