@@ -41,7 +41,7 @@ namespace NorthWind.Service
             return Save();
         }
 
-        public Models.Result Delete(int ID)
+        public Models.Result Delete(string  ID)
         {
 
             if (string.IsNullOrEmpty(ID))
@@ -65,7 +65,7 @@ namespace NorthWind.Service
             return db.Customers.ToList();
         }
 
-        public object GetEachData(int ID)
+        public object GetEachData(string ID)
         {
             var Customer = db.Customers.Find(ID);
             return Customer;

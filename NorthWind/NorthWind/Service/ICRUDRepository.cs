@@ -14,9 +14,9 @@ namespace NorthWind.Service
     {
         Result Create(T Content);
         Result Update(T Content);
-        Result Delete(int ID);
+        Result Delete(string ID);
         object GetList();
-        object GetEachData(int ID);
+        object GetEachData(string ID);
         Result Save();
     }
 }
