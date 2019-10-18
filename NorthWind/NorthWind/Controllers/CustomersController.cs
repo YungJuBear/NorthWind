@@ -16,7 +16,7 @@ namespace NorthWind.Controllers
     {
         private static ILogger _log = LogManager.GetCurrentClassLogger();
 
-        private readonly ICRUDRepository  CustomerRepository;
+        private readonly ICRUDRepository<Customers> CustomerRepository;
 
         public CustomersController()
         {
@@ -45,7 +45,7 @@ namespace NorthWind.Controllers
         // PUT: api/Customers/5
         [HttpPut]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCustomers([FromBody]Models.Customers Customer)
+        public IHttpActionResult PutCustomers([FromBody]Customers Customer)
         {
             if (string.IsNullOrEmpty(Customer.CustomerID))
             {
@@ -64,7 +64,7 @@ namespace NorthWind.Controllers
         // POST: api/Customers
         [HttpPost]
         [ResponseType(typeof(Customers))]
-        public IHttpActionResult PostCustomers([FromBody]Models.Customers Customer)
+        public IHttpActionResult PostCustomers([FromBody]Customers Customer)
         {
             if (string.IsNullOrEmpty(Customer.CustomerID))
             {
