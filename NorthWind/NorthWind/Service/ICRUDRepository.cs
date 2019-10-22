@@ -5,18 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
 
 namespace NorthWind.Service
 {
-    public interface ICRUDRepository<T>
+    public interface ICRUDRepository<T> where T : class 
     {
-        Result Create(T Content);
-        Result Update(T Content);
-        Result Delete(string ID);
-        object GetList();
-        object GetEachData(string ID);
-        Result Save();
+        void Create(T Content);
+        void Update(T Content);
+        void Delete(T Content);
+        IQueryable<T> GetAll();
+        T Get(Expression<Func<T,bool>> predicate);
+        void Save();
     }
 }
