@@ -16,82 +16,91 @@ namespace NorthWind.Controllers
     {
         private static ILogger _log = LogManager.GetCurrentClassLogger();
 
-        private readonly ICRUDRepository<Customers> CustomerRepository;
+        private readonly GenericRepository<Customers> CustomerRepository;
 
         public CustomersController()
         {
-            CustomerRepository = new CustomerRepository();
+            CustomerRepository = new GenericRepository<Customers>();
         }
             
         // GET: api/Customers
         [HttpGet]
         public IHttpActionResult GetCustomers()
         {
-            return Ok(CustomerRepository.GetList());
+            return Ok(CustomerRepository.GetAll());
         }
 
         // GET: api/Customers/5
         [HttpGet]
         [ResponseType(typeof(Customers))]
-        public IHttpActionResult GetCustomers(string id)
+        public IHttpActionResult GetCustomer(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
-                return Ok(new Result { ResultCode = 404, ResultMsg = "id不能為空。" });
+                return NotFound();
             }
-            return Ok(CustomerRepository.GetEachData(id));
+            return Ok(CustomerRepository.Get(x => x.CustomerID == id));
         }
 
         // PUT: api/Customers/5
-        [HttpPut]
-        [ResponseType(typeof(void))]
+        [HttpPut, ActionName("Update")]
+        [ResponseType(typeof(Result))]
         public IHttpActionResult PutCustomers([FromBody]Customers Customer)
         {
             if (string.IsNullOrEmpty(Customer.CustomerID))
             {
-                return Ok(new Result { ResultCode = 404, ResultMsg = "顧客編號不能為空。" });
+                return NotFound();
             }
-            if (string.IsNullOrEmpty(Customer.CompanyName))
+            else if (string.IsNullOrEmpty(Customer.CompanyName))
             {
-                return Ok(new Result { ResultCode = 404, ResultMsg = "公司名稱不能為空。" });
+                return BadRequest("公司名稱不能為空。");
             }
 
-            var Result = CustomerRepository.Update(Customer);
+             CustomerRepository.Update(Customer);
 
-            return Ok(Result);
+            return Ok();
         }
 
         // POST: api/Customers
-        [HttpPost]
-        [ResponseType(typeof(Customers))]
+        [HttpPost, ActionName("Create")]
+        [ResponseType(typeof(Result))]
         public IHttpActionResult PostCustomers([FromBody]Customers Customer)
         {
             if (string.IsNullOrEmpty(Customer.CustomerID))
             {
-                return Ok(new Result { ResultCode = 404, ResultMsg = "顧客編號不能為空。" });
+                return NotFound();
             }
-            if (string.IsNullOrEmpty(Customer.CompanyName))
+            else if (string.IsNullOrEmpty(Customer.CompanyName))
             {
-                return Ok (new Result { ResultCode = 404, ResultMsg = "公司名稱不能為空。" });
+                return BadRequest("公司名稱不能為空。");
             }
 
-            var Result = CustomerRepository.Create(Customer);
+           CustomerRepository.Create(Customer);
 
-            return Ok(Result);
+            return Ok();
         }
 
         // DELETE: api/Customers/5
-        [ResponseType(typeof(Customers))]
+        [ResponseType(typeof(Result))]
+        [HttpDelete, ActionName("Delete")]
         public IHttpActionResult DeleteCustomers(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
-                return Ok(new Result { ResultCode = 404, ResultMsg = "id不能為空。" });
+                return NotFound();
             }
 
-            var Result = CustomerRepository.Delete(id);
+            Customers customers =  CustomerRepository.Get(x => x.CustomerID == id);
 
-            return Ok(Result);
+            if (customers.Equals(null))
+            {
+                return BadRequest("找不到此顧客資料。");
+            }
+
+            CustomerRepository.Delete(customers);
+
+            return Ok();
         }
+
     }
 }
